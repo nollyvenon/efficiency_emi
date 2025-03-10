@@ -1,0 +1,8 @@
+{
+    "name": "Program",
+    "namespace": "Botble\\Program\\",
+    "provider": "Botble\\Program\\Providers\\ProgramServiceProvider",
+    "author": "Your Name",
+    "version": "1.0",
+    "description": "Manage programs and activities"
+}
