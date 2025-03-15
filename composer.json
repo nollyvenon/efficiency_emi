@@ -27,6 +27,7 @@
         "botble/slug": "*@dev",
         "botble/theme": "*@dev",
         "botble/widget": "*@dev",
+        "botble/table": "^1.0",
         "doctrine/dbal": "^3.8",
         "guzzlehttp/guzzle": "^7.7",
         "laravel/framework": "^10.24",
@@ -122,6 +123,10 @@
         {
             "type": "path",
             "url": "./platform/packages/*"
+        },
+        {
+            "type": "composer",
+            "url": "https://repo.botble.com"
         }
     ]
 }

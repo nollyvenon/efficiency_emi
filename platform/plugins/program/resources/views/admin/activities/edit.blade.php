@@ -7,7 +7,7 @@
         <h4>Activities</h4>
         <div id="activities-list">
             @foreach($program->activities as $activity)
-                @include('plugins/program::activities.item', ['activity' => $activity])
+                @include('plugins/program::admin.activities.list', ['activities' => $program->activities])
             @endforeach
         </div>
 

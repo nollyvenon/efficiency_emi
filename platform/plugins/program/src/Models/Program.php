@@ -23,4 +23,5 @@ class Program extends BaseModel
     {
         return $this->hasMany(Activity::class);
     }
+    
 }

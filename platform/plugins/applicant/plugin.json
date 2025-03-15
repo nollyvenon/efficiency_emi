@@ -1,0 +1,13 @@
+{
+    "name": "Applicant",
+    "namespace": "Botble\\Applicant\\",
+    "provider": "Botble\\Applicant\\Providers\\ApplicantServiceProvider",
+    "author": "Applicant",
+    "version": "1.0",
+    "description": "Applicant management system",
+    "autoload": {
+        "psr-4": {
+            "Botble\\Applicant\\": "src/"
+        }
+    }
+}

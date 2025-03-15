@@ -1,0 +1,18 @@
+Domain:https://efficiencydmi.org/
+
+cPanel details
+URL (options)	https://premium263.web-hosting.com/cpanel
+ 	(if DNS propagation is pending)
+ 	http://efficiencydmi.org/cpanel
+cPanel username: effikcdo
+cPanel password: sUMwwrMx2NGA
+===================================================================
+
+EfficiencyDMI Website Admin Dashboard Login
+https://efficiencydmi.com/program/login.php
+
+UserName: info@onyxdatasystems.com
+Password: webdev
+
+nollyvenon@yahoo.co.uk
+BZfiMdt9nj9nxrC

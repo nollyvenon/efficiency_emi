@@ -15,10 +15,4 @@ Route::group(['controller' => ApexaController::class, 'middleware' => ['web', 'c
     });
 });
 
-// Optional: Add to theme routes
-/*Theme::routes(function ($router) {
-    $router->get('programs', [PublicController::class, 'index']);
-    $router->get('programs/{slug}', [PublicController::class, 'show']);
-});*/
-
 Theme::routes();

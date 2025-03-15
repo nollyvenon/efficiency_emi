@@ -12,12 +12,14 @@ return new class extends Migration {
             $table->foreignId('program_id')->constrained();
             $table->string('title');
             $table->text('description');
+            $table->text('content');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->string('location_address')->nullable();
             $table->string('photo');
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }
