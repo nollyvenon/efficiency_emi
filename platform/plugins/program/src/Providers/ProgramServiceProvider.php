@@ -41,8 +41,8 @@ class ProgramServiceProvider extends ServiceProvider
             ->loadRoutes();
 
         SlugHelper::registering(function (): void {
-            SlugHelper::registerModule(Team::class, fn () => trans('plugins/program::program.programs'));
-            SlugHelper::setPrefix(Team::class, 'teams', true);
+            SlugHelper::registerModule(Program::class, fn () => trans('plugins/program::program.programs'));
+            SlugHelper::setPrefix(Program::class, 'programs', true);
         });
 
         DashboardMenu::default()->beforeRetrieving(function() {
