@@ -1,0 +1,16 @@
+{
+    "id": "onyxds/event",
+    "name": "Event",
+    "namespace": "Botble\\Event\\",
+    "provider": "Botble\\Event\\Providers\\EventServiceProvider",
+    "author": "Onyx Data Systems",
+    "url": "www.onyxdatasystems.com",
+    "version": "1.0.0",
+    "description": "Users can register for events on the frontend, and are added to the lists of event regsitrands, The admin can see those registered for the events, also the admin can manage, add an event etc",
+    "minimum_core_version": "7.3.0",
+    "autoload": {
+        "psr-4": {
+            "Platform\\Event\\": "src/"
+        }
+    }
+}

@@ -11,6 +11,14 @@ return new class () extends Migration {
             Schema::create('events', function (Blueprint $table) {
                 $table->id();
                 $table->string('name', 255);
+                $table->string('photo');
+                $table->text('description')->nullable();
+                $table->string('slug')->nullable();
+                $table->dateTime('start_time');
+                $table->dateTime('end_time');
+                $table->string('location_address', 255)->nullable();
+                $table->decimal('latitude', 10, 8)->nullable();
+                $table->decimal('longitude', 11, 8)->nullable();
                 $table->string('status', 60)->default('published');
                 $table->timestamps();
             });
@@ -19,7 +27,7 @@ return new class () extends Migration {
         Schema::create('event_registrations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
-            $table->string('name');
+            $table->string('user_id');
             $table->string('email');
             $table->timestamps();
         });
@@ -39,5 +47,6 @@ return new class () extends Migration {
     {
         Schema::dropIfExists('events');
         Schema::dropIfExists('events_translations');
+        Schema::dropIfExists('event_registrations');
     }
 };
