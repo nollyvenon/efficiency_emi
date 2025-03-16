@@ -1,9 +1,15 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 @foreach ($applicants as $applicant)
     <p>{{ $applicant->name }} - {{ $applicant->email }}
         <a href="{{ route('admin.applicants.updateStatus', ['id' => $applicant->id, 'status' => 'selected']) }}">Select</a>
     </p>
 @endforeach
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize plugins or tables here
+        window.LaravelDataTables = window.LaravelDataTables || {};
+    });
+</script>
 
 <?php
 $this->add('after_form', 'html', [
@@ -12,7 +18,7 @@ $this->add('after_form', 'html', [
         $(document).ready(function() {
             // Dynamic activity loading
             const programSelect = $('#program_id');
-            const activitySelect = $('#activities_id');
+            const activitySelect = $('#activity_id');
 
             programSelect.on('change', function() {
                 const programId = $(this).val();
@@ -49,3 +55,9 @@ $this->add('after_form', 'html', [
     </script>
     HTML
 ]);
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize plugins or tables here
+    window.LaravelDataTables = window.LaravelDataTables || {};
+    });
+</script>

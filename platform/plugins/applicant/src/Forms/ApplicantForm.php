@@ -30,7 +30,19 @@ class ApplicantForm extends FormAbstract
         //$socials = $this->model->socials ?? [];
         $programs = Program::query()->pluck('name', 'id')->all();
         $defaultProgram = Program::query()->first();
-        $user = $this->model->user ?? auth()->user();
+        //$user = $this->model->user ?? auth()->user();
+
+        // Get the user data safely
+        $user = ($this->model instanceof Applicant && $this->model->exists)
+            ? $this->model->user
+            : auth()->user();
+
+        // Check if we're editing an existing applicant
+        /*$isEditing = ($this->model instanceof Applicant)
+            ? $this->model->exists
+            : !empty($this->model['id']);*/
+
+        $applicant = Applicant::firstOrNew(['user_id' => $user->id]);
 
         $this
             ->model(Applicant::class)
@@ -47,15 +59,15 @@ class ApplicantForm extends FormAbstract
                     ->addAttribute('data-activity-source', route('applicants.get-activities'))
             )
             ->add(
-                'activities_id',
+                'activity_id',
                 SelectField::class,
                 SelectFieldOption::make()
                     ->label(trans('plugins/applicant::applicant.forms.activities'))
                     ->choices([])
-                    ->selected(function () {
-                        return $this->model->activities()->pluck('id')->all();
-                    })
-                    //->multiple()
+                    //->selected(function () {
+                    //    return $this->model->activities()->pluck('id')->all();
+                   //})
+                    ->selected(old('activity_id', $this->model->activity_id ?? ''))
                     ->searchable()
                     ->addAttribute('data-depends-on', '#program_id')
             )
@@ -64,9 +76,9 @@ class ApplicantForm extends FormAbstract
                 TextField::class,
                 TextFieldOption::make()
                     ->label(trans('First Name'))
-                    ->value($user->first_name ?? '')
+                    ->value(old('first_name', $user->first_name ?? ''))
                     ->required()
-                    ->disabled()
+                    ->addAttribute('disabled', !empty($user->first_name))
             )
             ->add(
                 'last_name',
@@ -75,7 +87,7 @@ class ApplicantForm extends FormAbstract
                     ->label(trans('Last Name'))
                     ->value($user->last_name ?? '')
                     ->required()
-                    ->disabled()
+                    ->addAttribute('disabled', !empty($user->last_name))
             )
             ->add(
                 'phone',
@@ -85,7 +97,7 @@ class ApplicantForm extends FormAbstract
                     ->placeholder(trans('plugins/applicant::applicant.forms.phone_placeholder'))
                     ->maxLength(120)
                     ->value($this->model->phone ?? '')
-                    ->disabled()
+                    ->addAttribute('disabled', !empty($user->phone))
             )
             ->add(
                 'email',
@@ -96,7 +108,7 @@ class ApplicantForm extends FormAbstract
                     ->maxLength(120)
                     ->value($user->email ?? '')
                     ->required()
-                    ->disabled()
+                    ->addAttribute('disabled', !empty($user->email))
             )
             ->add(
                 'country',
@@ -112,7 +124,8 @@ class ApplicantForm extends FormAbstract
                 TextField::class,
                 TextFieldOption::make()
                     ->label(trans('plugins/applicant::applicant.forms.occupation'))
-                    ->defaultValue(null)
+                    //->defaultValue(null)
+                    ->value($user->occupation ?? '')
                     // ->colspan(2)
             )
             ->add(
@@ -120,7 +133,7 @@ class ApplicantForm extends FormAbstract
                 TextField::class,
                 TextFieldOption::make()
                     ->label(trans('plugins/applicant::applicant.forms.highest_degree'))
-                    ->defaultValue(null)
+                    ->value(old('highest_degree', $this->model->highest_degree ?? ''))
                     //->colspan(2)
             )
             ->add(
@@ -128,7 +141,7 @@ class ApplicantForm extends FormAbstract
                 TextField::class,
                 TextFieldOption::make()
                     ->label(trans('plugins/applicant::applicant.forms.course_studied'))
-                    ->defaultValue(null)
+                    ->value(old('course_studied', $this->model->course_studied ?? ''))
             //    ->colspan(2)
             )
             ->add(
@@ -136,16 +149,14 @@ class ApplicantForm extends FormAbstract
                 DatePickerField::class,
                 DatePickerFieldOption::make()
                     ->label(trans('plugins/applicant::applicant.forms.birth_date'))
-                    ->defaultValue(null)
-            //    ->colspan(2)
+                    ->value(old('birth_date', $user->birth_date ?? ''))
             )
             ->add(
                 'website',
                 TextField::class,
                 TextFieldOption::make()
                     ->label(trans('plugins/applicant::applicant.forms.website_placeholder'))
-                    ->defaultValue(null)
-            //    ->colspan(2)
+                    ->value(old('website', $user->website ?? ''))
             )
             ->add(
                 'passport',
@@ -170,6 +181,16 @@ class ApplicantForm extends FormAbstract
                 MediaFileField::class,
                 InputFieldOption::make()
                     ->label(__('Other Uploads :number', ['number' => 4]))
+            )
+            ->add(
+                'user_id',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(false)
+                    ->value($user->id ?? '')
+                    ->required()
+                    //->addAttribute('style', 'display: none;')
+                    ->addAttribute('class', 'sr-only')
             );
 
         $this
@@ -187,7 +208,7 @@ class ApplicantForm extends FormAbstract
         <script>
             $(document).ready(function() {
                 const programSelect = $('#program_id');
-                const activitySelect = $('#activities_id');
+                const activitySelect = $('#activity_id');
 
 
                 // Clear and disable activities on init

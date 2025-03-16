@@ -16,28 +16,21 @@ Route::group(['namespace' => 'Botble\Applicant\Http\Controllers', 'middleware' =
     Route::post('applicant/register', 'ApplicantController@store')->name('applicant.register.store');
 });
 
-
+// routes/admin.php
 AdminHelper::registerRoutes(function (): void {
     Route::group(['namespace' => 'Botble\Applicant\Http\Controllers'], function (): void {
 
         Route::group(['prefix' => 'applicants', 'as' => 'applicants.'], function (): void {
             Route::resource('', 'ApplicantController')->parameters(['' => 'applicant']);
+            //Route::post('/{applicant}/assign-program', [ApplicantController::class, 'assignProgram'])->name('assign-program');
         });
 
-        /*Route::group([
-            'prefix' => 'applicants',
-            'as' => 'applicants.',
-            'middleware' => ['web', 'auth'],
-        ], function () {
-            Route::get('/', [ApplicantController::class, 'index'])->name('index');
-            Route::get('/create', [ApplicantController::class, 'create'])->name('create');
-            Route::post('/', [ApplicantController::class, 'store'])->name('store');
-            Route::get('/{applicant}/edit', [ApplicantController::class, 'edit'])->name('edit');
-            Route::put('/{applicant}', [ApplicantController::class, 'update'])->name('update');
-            Route::delete('/{applicant}', [ApplicantController::class, 'destroy'])->name('destroy');
-            // Custom routes
-            Route::post('/{applicant}/assign-program', [ApplicantController::class, 'assignProgram'])->name('assign-program');
-        });*/
+        Route::post('applicants/assign-program', [
+            'as' => 'applicants.assign-program',
+            'uses' => 'ApplicantController@assignProgram',
+            'permission' => 'applicants.edit',
+        ]);
+
     });
 
     Route::get('applicants/get-activities', [

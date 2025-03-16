@@ -25,27 +25,28 @@ class ActivityTable extends TableAbstract
 {
     //protected ?int $program = null;
 
-    private string|int|null $programId;
+    private string|int|null $programId = null;
 
     public function setup(): void
     {
-        $this->programId = request()->segment(3);
+        $programId = request()->segment(3);
+        $activityId = request()->segment(5);
         $this
             ->model(Activity::class)
             ->addHeaderAction(
-                $this->programId ?
+                $programId ?
                     CreateHeaderAction::make()
-                        ->route('admin.programs.activities.create', ['program' => $this->programId])
+                        ->route('admin.programs.activities.create', ['program' => $programId])
                     : null
             )
             ->addActions([
                 EditAction::make()->route('admin.programs.activities.edit', [
-                    'program' => $this->programId,
-                    'activity' => 'id' // Botble auto-resolves model ID
+                    'program' => $programId,
+                    'activity' => "{activity}",
                 ]),
                 DeleteAction::make()->route('admin.programs.activities.destroy', [
-                    'program' => $this->programId,
-                    'activity' => 'id'
+                    'program' => $programId,
+                    'activity' => "{activity}",
                 ])
             ])
             ->addBulkActions([
@@ -58,35 +59,37 @@ class ActivityTable extends TableAbstract
             ])
             ->addColumns([
                 IdColumn::make(),
-                NameColumn::make()
-                    ->route('admin.programs.activities.edit', [
-                        'program' => 1,
-                        'activity' => 'id' // Auto-resolves from Activity model
-                    ]),
-                CreatedAtColumn::make('start_date'),
-                CreatedAtColumn::make('end_date'),
+                FormattedColumn::make('title')
+                    ->title(trans('plugins/program::activity.forms.title'))
+                    ->getValueUsing(function (FormattedColumn $column) {
+                        $activity = $column->getItem();
+
+                        $color =$activity->percentage ? 'text-danger' : 'text-success';
+
+                        return Html::link(route('admin.programs.activities.edit', [
+                            'program' => request()->segment(3),
+                            'activity' => $activity->id
+                        ]), sprintf('%s', $activity->title ), [
+                            'data-bs-toggle' => 'tooltip',
+                            'target' => '_blank',
+                            'class' => $color
+                        ]);
+                    }),
+
+                CreatedAtColumn::make('start_time'),
+                CreatedAtColumn::make('end_time'),
                 ImageColumn::make('photo')
                     ->title(trans('Photo'))
                     ->width(80)
                     ->alignLeft()
                     ->orderable(false),
-                CreatedAtColumn::make(),
-                StatusColumn::make(),
+                NameColumn::make('status'),
             ])
             ->queryUsing(function ($query) {
-                $this->programId = request()->segment(3);
-                $query->where('program_id', 1)
+                $programId = request()->segment(3);
+                $query->where('program_id', $programId)
                     ->with(['program']);
             });
-    }
-
-    protected function getRouteParams(): Closure
-    {
-        return function ($model = null) {
-            $params = ['program' => $this->programId];
-            if ($model) $params['activity'] = $model->id;
-            return $params;
-        };
     }
 
     public function setProgramId(int $programId): self

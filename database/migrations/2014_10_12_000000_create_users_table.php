@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('phone', 50);
            // $table->string('first_name', 100);
             //$table->string('last_name', 100);
+            $table->timestamp('birth_date')->nullable();
             $table->string('country', 100);
             $table->string('occupation', 100);
             $table->timestamp('email_verified_at')->nullable();

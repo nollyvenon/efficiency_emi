@@ -26,9 +26,11 @@ return [
         'course_studied' => 'Course Studied',
         'birth_date' => 'Birth date',
         'website' => 'Website',
-        'website_placeholder' => 'Enter url...',
+        'website_placeholder' => 'Enter website...',
         'programs' => 'Programs',
         'activities' => 'Activities',
+        'user_id' => '',
+
 
     ],
 ];

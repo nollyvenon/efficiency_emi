@@ -12,7 +12,6 @@ class CreateApplicantsTable extends Migration
             $table->string('user_id', 255);
             $table->string('highest_degree')->unique();
             $table->string('course_studied')->unique();
-            $table->string('birth_date')->unique();
             $table->string('passport')->nullable();
             $table->text('additional_info')->nullable();
             $table->text('resume')->nullable();
