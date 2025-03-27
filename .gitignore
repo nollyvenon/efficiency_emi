@@ -32,6 +32,7 @@ bun.lockb
 /.sass-cache
 
 public/mix-manifest.json
+notes.txt
 
 public/themes
 public/docs

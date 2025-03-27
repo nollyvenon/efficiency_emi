@@ -23,6 +23,7 @@
                                     <a href="{{ $program->url }}" class="shine-animate">
                                         {{ RvMedia::image($program->photo, $program->name, 'medium-square') }}
                                     </a>
+
                             </div>
                             <div class="services__icon-shape">
                                 <div class="shape one">
