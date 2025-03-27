@@ -2,15 +2,18 @@
 
 namespace Botble\Program\Http\Controllers;
 
-use Botble\Base\Http\Controllers\BaseController;
+use Botble\Applicant\Forms\ApplicantForm;
+use Botble\Program\Forms\ProgramRegistrationForm;
+use Botble\Program\Models\Activity;
 use Botble\Program\Models\Program;
 use Botble\SeoHelper\Facades\SeoHelper;
 use Botble\Theme\Facades\Theme;
+use Illuminate\Routing\Controller;
 
-class PublicController extends BaseController
+class PublicController extends Controller
 {
 
-    public function index(Request $request)
+    /*public function index(Request $request)
     {
         $query = Program::query()
             ->where('status', true)
@@ -46,6 +49,47 @@ class PublicController extends BaseController
         SeoHelper::setTitle($program->name);
 
         return Theme::scope('plugins/program::show', compact('program'))->render();
+    }*/
+
+    public function show(int|string $id)
+    {
+        $program = Program::query()
+            ->where([
+                'id' => $id,
+                // 'user_id' => auth('customer')->id(),
+            ])
+            //->with(['address', 'products'])
+            ->firstOrFail();
+
+        $applyRegisterForm = ApplicantForm::createFromModel($program);
+
+        SeoHelper::setTitle(__('Efficiency EMI Program: :id', ['id' => $program->name]));
+
+        Theme::breadcrumb()
+            ->add(
+                __('Program detail: :id', ['id' => $program->name]),
+                route('public.programs.show', $id)
+            );
+
+        return Theme::scope(
+            'program.program',
+            compact('program', 'applyRegisterForm'),
+            'plugins/program::program.name'
+        )->render();
+    }
+
+    public function programs()
+    {
+        SeoHelper::setTitle(__('Programs'));
+
+        Theme::breadcrumb()->add(__('Programs'), route('public.programs'));
+
+        $programs = Program::query()
+            ->wherePublished()
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        return Theme::scope('program.programs', compact('programs'), 'plugins/program::themes.program')->render();
     }
 
     public function ical(Activity $activity)

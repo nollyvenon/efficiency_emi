@@ -7,36 +7,30 @@ use Botble\Base\Forms\FieldOptions\DatePickerFieldOption;
 use Botble\Base\Forms\FieldOptions\DescriptionFieldOption;
 use Botble\Base\Forms\FieldOptions\MediaImageFieldOption;
 use Botble\Base\Forms\FieldOptions\NameFieldOption;
-use Botble\Base\Forms\FieldOptions\SelectFieldOption;
 use Botble\Base\Forms\FieldOptions\StatusFieldOption;
+use Botble\Base\Forms\FieldOptions\TextareaFieldOption;
 use Botble\Base\Forms\FieldOptions\TextFieldOption;
 use Botble\Base\Forms\Fields\DatePickerField;
 use Botble\Base\Forms\Fields\EditorField;
 use Botble\Base\Forms\Fields\MediaImageField;
 use Botble\Base\Forms\Fields\SelectField;
+use Botble\Base\Forms\Fields\TextareaField;
 use Botble\Base\Forms\Fields\TextField;
 use Botble\Base\Forms\FormAbstract;
+use Botble\Event\Http\Requests\EventRegistrationRequest;
+use Botble\Program\Models\ProgramRegistration;
 
-use Botble\Program\Http\Requests\ActivityRequest;
-use Botble\Program\Http\Requests\ProgramRequest;
-use Botble\Program\Models\Activity;
-use Botble\Program\Models\Program;
-use Illuminate\Support\Arr;
-
-class ActivityForm extends FormAbstract
+class ProgramRegistrationForm extends FormAbstract
 {
     public function setup(): void
     {
-        //$socials = $this->model->socials ?? [];
-
         $this
-            ->model(Activity::class)
-            ->setValidatorClass(ActivityRequest::class)
-            ->columns()
-            ->add('title', TextField::class, NameFieldOption::make()->required()->colspan(2))
+            ->model(ProgramRegistration::class)
+            ->setValidatorClass(EventRegistrationRequest::class)
+            ->add('name', TextField::class, NameFieldOption::make()->required()->colspan(2))
 
             ->add('description', EditorField::class, DescriptionFieldOption::make()->colspan(2))
-            ->add('content', EditorField::class, ContentFieldOption::make()->allowedShortcodes()->colspan(2))
+            ->add('content', EditorField::class, ContentFieldOption::make()->colspan(2))
             ->add(
                 'slug',
                 TextField::class,
@@ -46,7 +40,9 @@ class ActivityForm extends FormAbstract
                     ->required()
                     ->maxLength(120)
             )
-            //->add('photo', MediaImageField::class, MediaImageFieldOption::make()->label(trans('plugins/program::program.forms.photo')))
+            ->add('location_address', TextareaField::class, TextareaFieldOption::make()
+                ->label(trans('plugins/program::activity.forms.location_address'))
+                ->colspan(2))
             ->add(
                 'start_time',
                 DatePickerField::class,
@@ -62,12 +58,10 @@ class ActivityForm extends FormAbstract
                     ->label(trans('plugins/program::activity.forms.end_date'))
                     ->defaultValue(null)
                     ->colspan(2)
-            );
+            )
+            ->add('photo', MediaImageField::class, MediaImageFieldOption::make()->label(trans('plugins/program::program.forms.photo')))
 
-        $this
             ->add('status', SelectField::class, StatusFieldOption::make())
-            ->add('photo', MediaImageField::class, MediaImageFieldOption::make()->label(trans('plugins/program::activity.forms.photo')))
-
             ->setBreakFieldPoint('start_time');
     }
 }

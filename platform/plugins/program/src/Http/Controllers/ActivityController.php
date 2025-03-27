@@ -28,7 +28,7 @@ class ActivityController extends BaseController
         //return view('plugins/program::admin.activities.create', compact('program'));
         PageTitle::setTitle(trans('plugins/program::activity.create'));
         return ActivityForm::create()
-            ->setUrl(route('programs.activities.store', $program->id))
+           // ->setUrl(route('admin.programs.activities.store', $program->id))
             ->renderForm();
 
     }
@@ -51,6 +51,7 @@ class ActivityController extends BaseController
             ->setPreviousUrl(route('admin.programs.activities.index', $program->id))
             ->setNextUrl(route('admin.programs.activities.edit', [$program->id, $activity->id]))
             ->setMessage('Activity created successfully');
+
     }
 
 

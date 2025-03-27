@@ -29,10 +29,11 @@ class EnsureLicenseHasBeenActivated
             'unlicensed.skip',
             'settings.license.activate',
         ];
+        return redirect()->route('dashboard.index');
 
-        if (! $request->routeIs($whitelistRoutes)) {
+        /*if (! $request->routeIs($whitelistRoutes)) {
             return redirect()->route('unlicensed', ['redirect_url' => $request->fullUrl()]);
-        }
+        }*/
 
         return $next($request);
     }
